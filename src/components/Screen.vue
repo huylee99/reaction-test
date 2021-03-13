@@ -1,16 +1,37 @@
 <template>
   <div class="screen">
     <p>* Click as fast as possible when the green screen appears</p>
-    <div class="screen--green" @click.once="clickHandler" v-if="screen"></div>
+    <div class="screen--green" v-if="showScreen" @click.once="endTimer"></div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['screen'],
+  props: ['timeout'],
+  data() {
+    return {
+      responseTime: null,
+      startTime: null,
+      endTime: null,
+      showScreen: false,
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.showScreen = true;
+      this.startTimer();
+    }, this.timeout);
+  },
   methods: {
-    clickHandler() {
-      this.$emit('stop');
+    startTimer() {
+      let d = new Date();
+      this.startTime = d.getTime();
+    },
+    endTimer() {
+      let d = new Date();
+      this.endTime = d.getTime();
+      this.responseTime = this.endTime - this.startTime;
+      this.$emit('end', this.responseTime);
     },
   },
 };

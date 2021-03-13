@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <h1 class="title--main">Reaction Timer</h1>
-    <h2 class="title--sub">Click Start to test your reaction</h2>
-    <button class="btn--start" @click="startTimeout" :disabled="disabled">
-      Start
+    <h2 class="title--sub">Click {{ button }} to test your reaction</h2>
+    <button class="btn--start" :disabled="gameStart" @click="startTest">
+      {{ button }}
     </button>
-    <Screen @stop="endTimer" :screen="showScreen" />
-    <Result :time="responseTime" :end="showResult" />
+    <Screen v-if="gameStart" :timeout="time" @end="end" />
+    <Result v-if="showResult" :result="result" />
   </div>
 </template>
 
@@ -17,35 +17,26 @@ import Result from './components/Result';
 export default {
   data() {
     return {
-      disabled: false,
-      showScreen: false,
+      button: 'Start',
+      gameStart: false,
+      time: null,
+      result: null,
       showResult: false,
-      timeStart: 0,
-      timeClick: 0,
-      responseTime: 0,
     };
   },
-  name: 'App',
   components: { Screen, Result },
   methods: {
-    startTimer() {
-      this.showScreen = !this.showScreen;
-      let d = new Date();
-      this.timeStart = d.getTime();
-    },
-    endTimer() {
-      this.disabled = false;
-      this.showResult = !this.showResult;
-      let d = new Date();
-      this.timeClick = d.getTime();
-      this.responseTime = this.timeClick - this.timeStart;
-    },
-    startTimeout() {
-      this.disabled = true;
-      this.showScreen = false;
+    startTest() {
+      this.button = 'Start';
+      this.gameStart = true;
       this.showResult = false;
-      let time = (Math.floor(Math.random() * 3) + 2) * 1000;
-      setTimeout(this.startTimer, time);
+      this.time = (Math.floor(Math.random() * 2) + 1) * 1000;
+    },
+    end(responseTime) {
+      this.button = 'Retry';
+      this.result = responseTime;
+      this.gameStart = false;
+      this.showResult = true;
     },
   },
 };
