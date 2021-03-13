@@ -44,7 +44,7 @@ export default {
       this.disabled = true;
       this.showScreen = false;
       this.showResult = false;
-      let time = (Math.floor(Math.random() * 3) + 2) * 1000;
+      let time = (Math.floor(Math.random() * 3) + 1) * 1000;
       setTimeout(this.startTimer, time);
     },
   },
