@@ -31,5 +31,6 @@ export default {
   transform: translate(-50%, 100%);
   color: #42b983;
   z-index: 999;
+  cursor:not-allowed;
 }
 </style>
